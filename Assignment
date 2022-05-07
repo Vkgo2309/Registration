@@ -1,0 +1,73 @@
+import re
+A = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+B = "^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%#?&])[A-Za-z\d@$!#%?&]{6,20}$"
+flag=0
+def check(email):
+    if(re.fullmatch(A, email)):
+        print("Valid Email")
+        flag=1
+    else:
+        print("Invalid Email")
+    return flag
+def check2(pswd):
+    if len(pswd)>5 and len(pswd)<16:
+        return 1
+    else:
+        return 0
+print("enter 1 for registeration:")
+print("enter 2 for login:")
+print("Enter any key if you forgot your password:")
+val=(int(input()))
+if val==1:
+
+    print("Enter Email id:")
+    Email=(str(input()))
+    flag=check(Email)
+    print("Enter the password:")
+    print("*Make sure the password contains minimum one special character,digit,Uppercase and lowercase*")
+    pswd=(str(input()))
+    p=check2(pswd)
+    che = re.compile(B)
+
+    if  p==1:
+        print("Password is valid.")
+        flag=flag+1
+    else:
+        print("Password invalid!!")
+    if(flag==2):
+        file1 = open("Original.txt", "a+")
+        final = Email+" "+pswd
+        file1.write(final+"\n")
+        file1.close()
+    f = open('Original.txt', 'r')
+    if f.mode=='r':
+        contents= f.read()
+
+elif val==2:
+
+    passwordAttemptLoop = 0
+    print("You have chosen to login!\n")
+    username = input("Please print your username below\n")
+    password = input("Please print your password below\n")
+    for line in open("Original.txt","r").readlines():
+        loginDetails = line.split()
+        if username == loginDetails[0] and password == loginDetails[1]:
+            passwordAttemptLoop = passwordAttemptLoop + 1
+            print("Login Successful")
+            break
+    if passwordAttemptLoop ==0:
+        print("Your username and/ or password is incorrect! Please try again!")
+else:
+
+    loop=0
+    email= str(input("Enter the Email ID: "))
+    for line in open("Original.txt","r").readlines():
+        loginDetails = line.split()
+        if email == loginDetails[0]:
+            pswd = loginDetails[1]
+            print("Your password is :")
+            print(pswd)
+            loop =1
+            break
+    if loop==0:
+        print("Your credentials aren't stored please register again")
